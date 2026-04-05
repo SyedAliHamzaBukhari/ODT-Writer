@@ -1,18 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    // Check if user was redirected due to session error
+    if (searchParams.get('session') === 'expired') {
+      setError('Your session has expired. Please sign in again.')
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
