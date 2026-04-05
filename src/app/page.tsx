@@ -116,14 +116,6 @@ export default function Home() {
       const response = await fetch('/api/documents')
       const data = await response.json()
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          router.push('/login?session=expired')
-          return
-        }
-        throw new Error(data.error || 'Failed to fetch documents')
-      }
-
       if (data.documents && data.documents.length > 0) {
         setDocuments(data.documents)
         if (!currentDocument) {
@@ -147,23 +139,12 @@ export default function Home() {
       })
 
       const data = await response.json()
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          // Session expired or invalid, redirect to login
-          router.push('/login?session=expired')
-          return
-        }
-        throw new Error(data.error || 'Failed to create document')
-      }
-
       if (data.document) {
         setDocuments([data.document, ...documents])
         setCurrentDocument(data.document)
       }
     } catch (error) {
       console.error('Error creating document:', error)
-      alert(error instanceof Error ? error.message : 'Failed to create document. Please try again.')
     }
   }
 
@@ -192,15 +173,6 @@ export default function Home() {
       })
 
       const data = await response.json()
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          router.push('/login?session=expired')
-          return
-        }
-        throw new Error(data.error || 'Failed to create welcome document')
-      }
-
       if (data.document) {
         setDocuments([data.document])
         setCurrentDocument(data.document)
