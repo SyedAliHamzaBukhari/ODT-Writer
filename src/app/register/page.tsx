@@ -10,7 +10,7 @@ export default function RegisterPage() {
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -19,13 +19,11 @@ export default function RegisterPage() {
     e.preventDefault()
     setError('')
 
-    // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match')
       return
     }
 
-    // Validate password strength
     if (formData.password.length < 8) {
       setError('Password must be at least 8 characters long')
       return
@@ -40,20 +38,20 @@ export default function RegisterPage() {
         body: JSON.stringify({
           username: formData.username,
           email: formData.email,
-          password: formData.password
-        })
+          password: formData.password,
+        }),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error || 'Failed to create account')
+        // API returns { message } not { error }
+        setError(data.message || 'Failed to create account')
         return
       }
 
-      // Redirect to login page
       router.push('/login?registered=true')
-    } catch (error) {
+    } catch (_err) {
       setError('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)
@@ -63,12 +61,8 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#191919]">
       <div className="w-full max-w-md p-8">
-        <h1 className="text-4xl font-bold text-center text-[#e2e2e2] mb-2">
-          ODT Writer
-        </h1>
-        <p className="text-center text-[#9aa6b2] mb-8">
-          Create your account
-        </p>
+        <h1 className="text-4xl font-bold text-center text-[#e2e2e2] mb-2">ODT Writer</h1>
+        <p className="text-center text-[#9aa6b2] mb-8">Create your account</p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -80,7 +74,7 @@ export default function RegisterPage() {
               type="text"
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#e2e2e2] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#ffffff] focus:border-transparent transition-all"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#e2e2e2] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all"
               placeholder="johndoe"
               required
               minLength={3}
@@ -96,7 +90,7 @@ export default function RegisterPage() {
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#e2e2e2] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#ffffff] focus:border-transparent transition-all"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#e2e2e2] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all"
               placeholder="you@example.com"
               required
             />
@@ -111,7 +105,7 @@ export default function RegisterPage() {
               type="password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#e2e2e2] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#ffffff] focus:border-transparent transition-all"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#e2e2e2] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all"
               placeholder="••••••••"
               required
               minLength={8}
@@ -127,7 +121,7 @@ export default function RegisterPage() {
               type="password"
               value={formData.confirmPassword}
               onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#e2e2e2] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#ffffff] focus:border-transparent transition-all"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-[#e2e2e2] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all"
               placeholder="••••••••"
               required
               minLength={8}
@@ -135,7 +129,7 @@ export default function RegisterPage() {
           </div>
 
           {error && (
-            <div className="bg-red-900/30 border border-red-800 text-red-300 px-4 py-3 rounded-lg">
+            <div className="bg-red-900/30 border border-red-800 text-red-300 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -143,7 +137,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 px-4 bg-[#ffffff] text-[#191919] font-semibold rounded-lg hover:bg-[#e5e5e5] focus:outline-none focus:ring-2 focus:ring-[#ffffff] focus:ring-offset-2 focus:ring-offset-[#191919] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 px-4 bg-white text-[#191919] font-semibold rounded-lg hover:bg-[#e5e5e5] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#191919] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Creating account...' : 'Sign up'}
           </button>
@@ -151,7 +145,7 @@ export default function RegisterPage() {
 
         <p className="mt-8 text-center text-[#9aa6b2]">
           Already have an account?{' '}
-          <Link href="/login" className="text-[#ffffff] hover:text-[#e5e5e5] font-medium transition-colors">
+          <Link href="/login" className="text-white hover:text-[#e5e5e5] font-medium transition-colors">
             Sign in
           </Link>
         </p>

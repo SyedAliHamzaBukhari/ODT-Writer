@@ -1,41 +1,23 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from "@/components/providers/session-provider";
+// src/app/layout.tsx
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import { AuthSessionProvider } from "@/components/providers/session-provider"
+import "./globals.css"
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "ODT Writer - Minimal Document Editor",
-  description: "A minimal, Notion-inspired online document editor",
-  keywords: ["ODT Writer", "Document Editor", "Notion-inspired", "Rich Text Editor"],
-  authors: [{ name: "ODT Writer" }],
-};
+  title: "ODT Writer",
+  description: "A minimal, dark-themed online document editor",
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <AuthProvider>
-          {children}
-          <Toaster />
-        </AuthProvider>
+      <body className={inter.className}>
+        <AuthSessionProvider>{children}</AuthSessionProvider>
       </body>
     </html>
-  );
+  )
 }

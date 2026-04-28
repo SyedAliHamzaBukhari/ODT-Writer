@@ -1,63 +1,51 @@
-import { NextResponse } from "next/server"
+// src/app/api/auth/register/route.ts
+// POST /api/auth/register — create a new user account
+
+import { NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcrypt"
 import { db } from "@/lib/db"
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json()
-    const { username, email, password } = body
+const SALT_ROUNDS = 12
 
-    if (!username || !email || !password) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      )
-    }
+export async function POST(req: NextRequest) {
+  const body = await req.json()
+  const { username, email, password } = body
 
-    // Check if user already exists
-    const existingUser = await db.user.findFirst({
-      where: {
-        OR: [
-          { email },
-          { username }
-        ]
-      }
-    })
-
-    if (existingUser) {
-      return NextResponse.json(
-        { error: "User with this email or username already exists" },
-        { status: 400 }
-      )
-    }
-
-    // Hash password
-    const passwordHash = await bcrypt.hash(password, 12)
-
-    // Create user
-    const user = await db.user.create({
-      data: {
-        username,
-        email,
-        passwordHash
-      }
-    })
-
+  if (!username || !email || !password) {
     return NextResponse.json(
-      {
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email
-        }
-      },
-      { status: 201 }
-    )
-  } catch (error) {
-    console.error("Registration error:", error)
-    return NextResponse.json(
-      { error: "Failed to create user" },
-      { status: 500 }
+      { message: "Username, email and password are required." },
+      { status: 400 }
     )
   }
+
+  if (password.length < 8) {
+    return NextResponse.json(
+      { message: "Password must be at least 8 characters." },
+      { status: 400 }
+    )
+  }
+
+  const existing = await db.user.findFirst({
+    where: { OR: [{ email }, { username }] },
+  })
+
+  if (existing) {
+    return NextResponse.json(
+      { message: "Email or username is already taken." },
+      { status: 409 }
+    )
+  }
+
+  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS)
+
+  const user = await db.user.create({
+    data: {
+      username: String(username).trim(),
+      email: String(email).toLowerCase().trim(),
+      passwordHash,
+    },
+    select: { id: true, username: true, email: true },
+  })
+
+  return NextResponse.json({ user }, { status: 201 })
 }
