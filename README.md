@@ -1,29 +1,29 @@
 # ODT Writer - Minimal Document Editor
 
-A dark-themed, Notion-inspired online document editor built with Next.js 16, TypeScript, Tailwind CSS 4, Prisma, and NextAuth.js.
+A dark-themed, Notion-inspired online document editor
 
 ## Features
 
-✨ **Rich Text Editing**
+**Rich Text Editing**
 - Floating toolbar with bold, italic, underline
 - Headings (H1, H2, H3)
 - Ordered and unordered lists
 - Inline code
 - Tables with grid picker and context menu operations
 
-🔐 **Authentication**
+**Authentication**
 - User registration and login
 - Secure password hashing with bcrypt
 - Session-based authentication
 - User data isolation
 
-📊 **Document Management**
+**Document Management**
 - Create, rename, and delete documents
 - Auto-save every 2 seconds (debounced)
 - Real-time save status indicator
 - Documents sorted by last modified
 
-📈 **Live Statistics**
+**Live Statistics**
 - Word count
 - Character count
 - Estimated reading time
@@ -39,26 +39,6 @@ A dark-themed, Notion-inspired online document editor built with Next.js 16, Typ
 - **Authentication**: NextAuth.js v4
 - **Icons**: Lucide React
 
-## Installation & Setup
-
-### Prerequisites
-
-- Node.js 18+ or Bun 1.3+
-- npm, yarn, or bun package manager
-
-### Step 1: Install Dependencies
-
-```bash
-# Using Bun (recommended)
-bun install
-
-# Or using npm
-npm install
-
-# Or using yarn
-yarn install
-```
-
 ### Step 2: Initialize Database
 
 ```bash
@@ -68,21 +48,6 @@ bun run db:push
 # Or generate Prisma client first
 bun run db:generate
 ```
-
-### Step 3: Start Development Server
-
-```bash
-# Using Bun
-bun run dev
-
-# Or using npm
-npm run dev
-
-# Or using yarn
-yarn dev
-```
-
-The application will be available at **http://localhost:3000**
 
 ## Usage
 
@@ -226,13 +191,6 @@ datasource db {
 bun run db:push
 ```
 
-## Theme Colors
-
-- Background: `#191919`
-- Sidebar: `#1a1a1a`
-- Text: `#e2e2e2`
-- Accent/White: `#ffffff`
-
 ## Troubleshooting
 
 ### Port 3000 Already in Use
@@ -241,12 +199,5 @@ Change the port in `package.json`:
 "dev": "next dev -p 3001"
 ```
 
-### Database Errors
-Run `bun run db:push` to sync the schema with your database.
-
-### NextAuth Session Issues
-Ensure `NEXTAUTH_SECRET` and `NEXTAUTH_URL` are correctly set in `.env`.
-
 ## License
-
 This project is provided as-is for educational and personal use.
